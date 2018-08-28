@@ -123,16 +123,6 @@ export default Kapsule({
             }
           }
 
-          /*if (state.nodeFilteredCanvasObject) {
-            const filterValues = state.nodeFilteredCanvasObject.filterValues;
-            const nodeIdStr = node.id.toString();
-            if(filterValues.has(nodeIdStr)) {
-              console.log("here")
-              state.nodeFilteredCanvasObject(node, state.ctx, state.globalScale);
-              return;
-            }
-          }*/
-
           // Draw wider nodes by 1px on shadow canvas for more precise hovering (due to boundary anti-aliasing)
           const r = Math.sqrt(Math.max(0, getVal(node) || 1)) * state.nodeRelSize + padAmount;
 
