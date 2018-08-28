@@ -31,6 +31,7 @@ export default Kapsule({
     nodeColor: { default: 'color', triggerUpdate: false },
     nodeAutoColorBy: {},
     nodeCanvasObject: { triggerUpdate: false },
+    filterCanvasObject: { default: new Set([]), triggerUpdate: false },
     linkSource: { default: 'source' },
     linkTarget: { default: 'target' },
     linkColor: { default: 'color', triggerUpdate: false },
@@ -108,10 +109,29 @@ export default Kapsule({
         ctx.save();
         state.graphData.nodes.forEach(node => {
           if (state.nodeCanvasObject) {
-            // Custom node paint
-            state.nodeCanvasObject(node, state.ctx, state.globalScale);
-            return;
+            if (state.filterCanvasObject) {
+              if(state.filterCanvasObject.values.has(node[state.filterCanvasObject.property])) {
+                // Custom node paint
+                state.nodeCanvasObject(node, state.ctx, state.globalScale);
+                return;
+              }
+            }
+            else {
+              // Custom node paint
+              state.nodeCanvasObject(node, state.ctx, state.globalScale);
+              return;
+            }
           }
+
+          /*if (state.nodeFilteredCanvasObject) {
+            const filterValues = state.nodeFilteredCanvasObject.filterValues;
+            const nodeIdStr = node.id.toString();
+            if(filterValues.has(nodeIdStr)) {
+              console.log("here")
+              state.nodeFilteredCanvasObject(node, state.ctx, state.globalScale);
+              return;
+            }
+          }*/
 
           // Draw wider nodes by 1px on shadow canvas for more precise hovering (due to boundary anti-aliasing)
           const r = Math.sqrt(Math.max(0, getVal(node) || 1)) * state.nodeRelSize + padAmount;
